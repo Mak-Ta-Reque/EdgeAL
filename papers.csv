@@ -1,0 +1,14 @@
+Name ;Type;Data set link;Paper;Github;;
+Consistency-based Semi-supervised Evidential Active Learning for Diagnostic Radiograph Classification;Classification (AL);https://nihcc.app.box.com/v/ChestXray-NIHCC;https://link.springer.com/epdf/10.1007/978-3-031-16452-1_3?sharing_token=EmD4321qMxVEhR2BpJLRLve4RwlQNchNByi7wbcMAY4L66RnN6EH-Qpj4d-T4RVyRJPTykJ5S8Fb1VFwF6I64OQ0cqYfSFB8vJaPPTUE1kLCjUj3iPwLZ-0nJNJ2p-viPHazKU_zvdEs8jmxXi8iKb8dBL1chIL41_ZcbubJGUI=;;;
+Discrepancy-based Active Learning for Weakly Supervised Bleeding Segmentation in Wireless Capsule Endoscopy Images;Segmentation (AL);;https://link.springer.com/epdf/10.1007/978-3-031-16431-6_64?sharing_token=lRpR9gM_OtP-F79JmFTJa_e4RwlQNchNByi7wbcMAY7ZlzAyNldSVTx86qNGeZBPfKLw9afCnX1H7csvdSueqYNQOt9GmmkQU-Pg-F5Vujfjv_odL0Uffif6FQjeqfhi14nK0m00nfRJY0uPW5i-a3pyAQtHsaiyRB3xFEC1aDw=;https://github.com/baifanxxx/awesome-active-learning;;
+Warm Start Active Learning with Proxy Labels & Selection via Semi-Supervised Fine-Tuning;3D Segmentation (AL);http://medicaldecathlon.com/;https://link.springer.com/epdf/10.1007/978-3-031-16452-1_29?sharing_token=p-qxHWDLb__fFVp_BL7D8_e4RwlQNchNByi7wbcMAY4L66RnN6EH-Qpj4d-T4RVyjhShwFZfDvj2_UuntFmOnLACEeVzZYMuP59sv06knQQuf7_obVyUPy_uM57lTNMF47oWyUXicIkZ__nIpDKSkIpKldM7StzSTNhWtw2YKY4=;;;
+Unsupervised Domain Adaptive Fundus Image Segmentation with Category-level Regularization;Segmentation;;https://rdcu.be/cVRsg ;;;
+A Spatiospectral Dual-Encoder Network for Medical Image Segmentation;Segmentation;"http://www.duke.edu/~sf59/Datasets/2015_BOE_Chiu2.zip
+http://people.ece.umn.edu/users/parhi/.DATA/OCT/DME/UMNDataset.mat ";https://rdcu.be/cVRso ;https://github.com/azadef/ynet ;;
+vMFNet: Compositionality Meets Domain-generalised Segmentation;Segmentation;https://www.ub.edu/mnms/ http://niftyweb.cs.ucl.ac.uk/challenge/index.php;https://rdcu.be/cVRXF ;https://github.com/vios-s/vMFNet ;;
+;;http://niftyweb.cs.ucl.ac.uk/challenge/index.php;;;;
+Vector Quantisation for Robust Segmentation;Segmentation;https://www.synapse.org/#!Synapse:syn3193805/wiki/89480;https://rdcu.be/cVRwQ ;https://github.com/AinkaranSanthi/Vector-Quantisation-for-Robust-Segmentation ;;
+;;https://nihcc.app.box.com/s/r8kf5xcthjvvvf6r7l1an99e1nj4080m;;;;
+;;http://db.jsrt.or.jp/eng.php;;;;
+;;https://wiki.cancerimagingarchive.net/display/Public/NCI-ISBI+2013+Challenge+-+Automated+Segmentation+of+Prostate+Structures ;;;;
+Partial-supervised Learning for Vessel Segmentation in Ocular Images;Segmentation (AL);;;;;

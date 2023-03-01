@@ -1,0 +1,207 @@
+python train.py --model y_net_gen_ffc  --dataset duke --workers 2 --epochs 100 --eval-interval 5 --batch-size=10 --lr 0.0004 --use-lr-scheduler --lr-scheduler step --step-size 40 --checkname full-run_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240 --base-size 240,240
+
+
+adam: python train.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 5 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 40 --checkname full-run_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240 --base-size 240,240 --loss-type ce+dice 
+
+good result: 
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 60 --checkname regional_voteentropy_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focal --base-size 224,224 --loss-type focal --max-iterations 16 --active-selection-size 7 --active-selection-mode voteentropy_region --region-selection-mode superpixel
+
+ensemble:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname ensemble_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 10 --active-selection-size 7 --active-selection-mode ensemble
+
+ensemble average_ranking:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname ensemble_average_ranking_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 10 --active-selection-size 7 --active-selection-mode ensemble
+
+random:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname random_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 10 --active-selection-size 7 --active-selection-mode random
+
+ceal:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname ceal_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 10 --active-selection-size 7 --active-selection-mode ceal --start-entropy-threshold 0.0275 --entropy-change-per-selection 0.001815
+
+
+
+
+mcdr:
+
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname mcdr_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 10 --active-selection-size 7 --active-selection-mode  voteentropy_soft
+
+regional_mcdr:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname regional_mcdr_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 10 --active-selection-size 7 --active-selection-mode voteentropy_region --region-selection-mode superpixel
+
+view_entropy:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname view_entropy_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 10 --active-selection-size 7 --active-selection-mode viewmc_kldiv_region --region-selection-mode superpixel
+
+
+full run:
+python train.py --model y_net_gen_ffc  --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --use-lr-scheduler --lr-scheduler step --step-size 80 --optimizer Adam --checkname full-run_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240 --base-size 240,240
+
+for other runs follow random command.
+
+
+AROI dataset:
+
+Train:
+python train.py --model y_net_gen_ffc  --dataset AROI --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --use-lr-scheduler --lr-scheduler step --step-size 80 --optimizer Adam --checkname full-run_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240 --base-size 240,240
+Test DICE: [0.986411304281862, 0.9589088587152877, 0.9479615868338003, 0.633391424113472, 0.983386428964218, 0.6828752785673873, 0.5283825959588618, 0.979866251773347], Mean dice score:0.8376479672905582
+
+Random: 
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset AROI --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname random_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 90 --active-selection-size 20 --active-selection-mode random
+Dice score:[0.9976505525160155, 0.9630572955880389, 0.9563689031856972, 0.6432970512233325, 0.9847329958973315, 0.6327426970973763, 0.5565408401304155, 0.9798663230988269], Mean dice score:0.8582820794310346
+
+CEAL:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset AROI --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname ceal_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 90 --active-selection-size 20 --active-selection-mode ceal --start-entropy-threshold 0.0275 --entropy-change-per-selection 0.001815
+Dice score:[0.9936589138619851, 0.9619368482756134, 0.945153955245178, 0.6372197192387293, 0.9868972053463827, 0.6698808799484697, 0.5115539442090486, 0.9798663230988269], Mean dice score:0.845770970222934
+
+ENT:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset AROI --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname ent_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 90 --active-selection-size 20 --active-selection-mode softmax_entropy
+Dice score:[0.9979000387575803, 0.9582056571173188, 0.9524846484997128, 0.6468217616913302, 0.9874961336187068, 0.6765934653788939, 0.5869727576428484, 0.9798663230988269], Mean dice score:0.8482926031887131
+
+CONF:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset AROI --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname conf_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 90 --active-selection-size 20 --active-selection-mode softmax_confidence
+Dice score:[0.997780987880374, 0.9576259395420151, 0.9505189505199458, 0.6420047961225446, 0.9888464660452516, 0.7028511508304035, 0.6014684066234708, 0.9798663230988269], Mean dice score:0.8526203744363465
+
+MAR:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset AROI --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname mar_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 90 --active-selection-size 20 --active-selection-mode softmax_margin
+Dice score:[0.9979945389216378, 0.9641457040037885, 0.9573533867029536, 0.6473184649976308, 0.9878150864735545, 0.6825094772303485, 0.6186207537562992, 0.9798663230988269], Mean dice score:0.8544529620433013
+
+CSET:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset AROI --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname coreset_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 90 --active-selection-size 20 --active-selection-mode coreset
+Dice score:[0.9979863698850542, 0.9616877920675597, 0.9519261297763594, 0.6319452976220407, 0.9875941132539071, 0.6448997691949132, 0.534563425266833, 0.9798663230988269], Mean dice score:0.8363086493223305
+
+MAXRPR:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset AROI --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname maxrpr_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 90 --active-selection-size 20 --active-selection-mode voteentropy_max_repr
+Dice score:[0.9975337610148743, 0.957902317879184, 0.9444061877743509, 0.6263737236493386, 0.985010305507071, 0.5606885716790947, 0.557185451146496, 0.9798663230988269], Mean dice score:0.8261208306222954
+
+EdgeAL:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset AROI --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname  edgeal_entropy_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 90 --active-selection-size 20 --active-selection-mode viewmc_kldiv_region --region-selection-mode superpixel
+Dice score:[0.9974968589392285, 0.9603925199316652, 0.9474182604943346, 0.6338391674044949, 0.9879981527392496, 0.6886258410073323, 0.529856713708613, 0.9798663230988269], Mean dice score:0.8406867344907466
+
+MCDR:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset AROI --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname mcdr_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 90 --active-selection-size 20 --active-selection-mode  voteentropy_soft
+Dice score:[0.9965493199009223, 0.9642163259070992, 0.9582150966529078, 0.6455182219111679, 0.985404337412559, 0.6721392485919415, 0.5465842196128713, 0.9798663230988269], Mean dice score:0.8435616401217928
+
+RMCDR:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset AROI --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname rmcdr_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 90 --active-selection-size 20 --active-selection-mode voteentropy_region --region-selection-mode superpixel
+Dice score:[0.9981870019195864, 0.9619410037994385, 0.9534309418409462, 0.6275713597768106, 0.9853148528393483, 0.6235369853616523, 0.5622844409573904, 0.9798663230988269], Mean dice score:0.836516614728326
+
+UMN:
+EdgeAL:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset UMN --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname  edgeal_entropy_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 23 --active-selection-size 20 --active-selection-mode viewmc_kldiv_region --region-selection-mode superpixel
+Dice score:[0.9959341034889221, 0.7699545754343308], Mean dice score:0.8829443378448486
+
+RMCDR:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset UMN --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname rmcdr_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 23 --active-selection-size 20 --active-selection-mode voteentropy_region --region-selection-mode superpixel
+Dice score:[0.9956324725151062, 0.8076008816735811], Mean dice score:0.901616676568985
+
+MCDR:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset UMN --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname mcdr_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 23 --active-selection-size 20 --active-selection-mode  voteentropy_soft
+Dice score:[0.9958134179115296, 0.7902270189098636], Mean dice score:0.893020218372345
+
+MAXRPR:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset UMN --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname maxrpr_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 23 --active-selection-size 20 --active-selection-mode voteentropy_max_repr
+Dice score:[0.9960698022842407, 0.7380919175832678], Mean dice score:0.8670808584690094
+
+CSET:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset UMN --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname coreset_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --gpu-ids 0 --max-iterations 23 --active-selection-size 20 --active-selection-mode coreset
+Dice score:[0.9965145602226257, 0.830385409690287], Mean dice score:0.9134499835968017
+
+MAR:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset UMN --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname mar_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --gpu-ids 0 --max-iterations 23 --active-selection-size 20 --active-selection-mode softmax_margin
+Dice score:[0.9956070637702942, 0.7988297679813695], Mean dice score:0.8972184143066406
+
+CONF:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset UMN --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname conf_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --gpu-ids 0 --max-iterations 23 --active-selection-size 20 --active-selection-mode softmax_confidence
+Dice score:[0.995553807258606, 0.7047176735655762], Mean dice score:0.8501357390880585
+
+ENT:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset UMN --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname ent_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --gpu-ids 0 --loss-type focal --max-iterations 23 --active-selection-size 20 --active-selection-mode softmax_entropy
+Dice score:[0.9956616425514221, 0.7676830928256095], Mean dice score:0.881672366142273
+
+CEAL:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset UMN --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname ceal_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 23 --active-selection-size 20 --active-selection-mode ceal --start-entropy-threshold 0.0275 --entropy-change-per-selection 0.001815
+Dice score:[0.995722023487091, 0.7929978182656996], Mean dice score:0.8943599190711975
+
+Random: 
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset UMN --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname random_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type focal --max-iterations 23 --active-selection-size 20 --active-selection-mode random
+Dice score:[0.9960470023155212, 0.7727789052015287], Mean dice score:0.8844129512310028
+
+Train:
+python train.py --model y_net_gen_ffc  --dataset UMN --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --use-lr-scheduler --lr-scheduler step --step-size 80 --optimizer Adam --checkname full-run_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240 --base-size 240,240 --gpu-ids 0
+Dice score:[0.9956136980056762, 0.801209569448638], Mean dice score:0.8984116339683532
+
+
+DUKE:
+
+Train:
+python train.py --model y_net_gen_ffc  --dataset duke --workers 2 --epochs 100 --eval-interval 5 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --use-lr-scheduler --lr-scheduler step --step-size 100 --optimizer Adam --checkname full-run_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240 --base-size 240,240 --loss-type ce+dice
+
+Random: 
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname random_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --max-iterations 10 --active-selection-size 7 --active-selection-mode random
+
+EdgeAL:
+
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 5 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname view_entropy_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --max-iterations 10 --active-selection-size 7 --active-selection-mode viewmc_kldiv_region --region-selection-mode superpixel
+
+MAR:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname mar_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --gpu-ids 0 --max-iterations 10 --active-selection-size 7 --active-selection-mode softmax_margin
+
+CEAL:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname ceal_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --gpu-ids 0 --max-iterations 10 --active-selection-size 7 --active-selection-mode ceal --start-entropy-threshold 0.0275 --entropy-change-per-selection 0.001815
+
+MAXRPR:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname maxrpr_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --gpu-ids 0 --max-iterations 10 --active-selection-size 7 --active-selection-mode voteentropy_max_repr
+
+CSET:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname coreset_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --gpu-ids 1 --max-iterations 10 --active-selection-size 7 --active-selection-mode coreset
+
+CONF:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname conf_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --gpu-ids 1 --max-iterations 10 --active-selection-size 7 --active-selection-mode softmax_confidence
+
+RMCDR:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname rmcdr_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --max-iterations 10 --active-selection-size 7 --active-selection-mode voteentropy_region --region-selection-mode superpixel
+
+MCDR:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname mcdr_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --max-iterations 10 --active-selection-size 7 --active-selection-mode  voteentropy_soft
+
+ENT:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname ent_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --gpu-ids 0 --loss-type ce+dice --max-iterations 10 --active-selection-size 7 --active-selection-mode softmax_entropy
+
+
+UMN:
+
+Train:
+python train.py --model y_net_gen_ffc  --dataset duke --workers 2 --epochs 100 --eval-interval 5 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --use-lr-scheduler --lr-scheduler step --step-size 100 --optimizer Adam --checkname full-run_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240 --base-size 240,240 --loss-type ce+dice
+Dice score:[0.9954770703315735, 0.7721173195576266], Mean dice score:0.8837971959114075
+Random: 
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname random_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --max-iterations 10 --active-selection-size 7 --active-selection-mode random
+
+EdgeAL:
+
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 5 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname view_entropy_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --max-iterations 10 --active-selection-size 7 --active-selection-mode viewmc_kldiv_region --region-selection-mode superpixel
+
+MAR:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname mar_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --gpu-ids 0 --max-iterations 10 --active-selection-size 7 --active-selection-mode softmax_margin
+
+CEAL:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname ceal_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --gpu-ids 0 --max-iterations 10 --active-selection-size 7 --active-selection-mode ceal --start-entropy-threshold 0.0275 --entropy-change-per-selection 0.001815
+
+MAXRPR:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname maxrpr_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --gpu-ids 0 --max-iterations 10 --active-selection-size 7 --active-selection-mode voteentropy_max_repr
+
+CSET:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname coreset_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --gpu-ids 1 --max-iterations 10 --active-selection-size 7 --active-selection-mode coreset
+
+CONF:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname conf_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --gpu-ids 1 --max-iterations 10 --active-selection-size 7 --active-selection-mode softmax_confidence
+
+RMCDR:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname rmcdr_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --max-iterations 10 --active-selection-size 7 --active-selection-mode voteentropy_region --region-selection-mode superpixel
+
+MCDR:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname mcdr_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --max-iterations 10 --active-selection-size 7 --active-selection-mode  voteentropy_soft
+
+ENT:
+python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname ent_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --gpu-ids 0 --loss-type ce+dice --max-iterations 10 --active-selection-size 7 --active-selection-mode softmax_entropy
+
+
+
