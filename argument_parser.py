@@ -73,7 +73,7 @@ def parse_args():
     parser.add_argument('--region-selection-mode', type=str, default='superpixel', help='use superpixels or windows as region selection mode')
     parser.add_argument('--view-entropy-mode', type=str, default='mc_dropout', choices=['soft', 'vote', 'mc_dropout'], help='probability estimate = softmax or vote or mcdropout')
     parser.add_argument('--active-selection-mode', type=str, default='random',
-                        choices=['random', 'viewentropy_region', 'voteentropy_soft', 'voteentropy_region', 'softmax_entropy', 'softmax_confidence', 'softmax_margin', 'coreset', 'voteentropy_max_repr', 'viewmc_kldiv_region', 'ceal', 'ensemble'])
+                        choices=['random', 'edgeal_region', 'viewentropy_regio', 'voteentropy_soft', 'voteentropy_region', 'softmax_entropy', 'softmax_confidence', 'softmax_margin', 'coreset', 'voteentropy_max_repr', 'viewmc_kldiv_region', 'ceal', 'ensemble', 'badge_selection'])
     parser.add_argument('--view-prob-aggr', type=str, default='entropy')
     parser.add_argument('--superpixel-dir', type=str, default='superpixel', help='directory for supepixel maps inside the dataset raw root')
     parser.add_argument('--superpixel-coverage-dir', type=str, default='coverage_superpixel', help='directory for coverage maps inside the dataset raw root')

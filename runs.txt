@@ -205,3 +205,5 @@ python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --work
 
 
 
+Bagee:
+python train_active.py --model unet  --g-ratio 0.5 --dataset UMN --workers 2 --epochs 5 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 80 --checkname badge_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --gpu-ids 0 --loss-type focal --max-iterations 23 --active-selection-size 20 --active-selection-mode badge_selection

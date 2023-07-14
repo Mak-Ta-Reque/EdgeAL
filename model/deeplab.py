@@ -72,8 +72,14 @@ class DeepLab(nn.Module):
 
 class UNet(nn.Module):
 
-    def __init__(self, in_channels=3, num_classes=1, init_features=32):
+    def __init__(self, in_channels=3, num_classes=1, init_features=32, useNonLin=True):
         super(UNet, self).__init__()
+        # Modfying model for badge selection methon active learning
+        self.embSize = 128
+        
+        self.useNonLin = useNonLin
+        # OLd code
+ 
         out_channels = num_classes
         features = init_features
         self.encoder1 = UNet._block(in_channels, features, name="enc1")
@@ -83,10 +89,13 @@ class UNet(nn.Module):
         self.encoder3 = UNet._block(features * 2, features * 4, name="enc3")
         self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2)
         self.encoder4 = UNet._block(features * 4, features * 8, name="enc4")
+        self.lm1 = UNet._block(features * 8, self.embSize,  name="emb")
         self.pool4 = nn.MaxPool2d(kernel_size=2, stride=2)
-
+        
+        
         self.bottleneck = UNet._block(features * 8, features * 16, name="bottleneck")
 
+        
         self.upconv4 = nn.ConvTranspose2d(
             features * 16, features * 8, kernel_size=2, stride=2
         )
@@ -116,6 +125,7 @@ class UNet(nn.Module):
         enc4 = self.encoder4(self.pool3(enc3))
 
         bottleneck = self.bottleneck(self.pool4(enc4))
+        
 
         dec4 = self.upconv4(bottleneck)
         dec4 = torch.cat((dec4, enc4), dim=1)
@@ -129,9 +139,11 @@ class UNet(nn.Module):
         dec1 = self.upconv1(dec2)
         dec1 = torch.cat((dec1, enc1), dim=1)
         dec1 = self.decoder1(dec1)
-
-        return self.softmax(self.conv(dec1))
-
+        if self.useNonLin: emb = F.relu(self.lm1(enc4))
+        else: emb = self.lm1(enc4)
+        return self.softmax(self.conv(dec1))#, emb
+    def get_embedding_dim(self):
+        return self.embSize
     @staticmethod
     def _block(in_channels, features, name):
         return nn.Sequential(

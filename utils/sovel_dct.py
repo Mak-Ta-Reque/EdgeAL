@@ -12,7 +12,7 @@ import cv2
 import constants
 color = os.path.join(constants.HDD_DATASET_ROOT, constants.DATASET , "raw/selections/color") #os.path.join(constants.HDD_DATASET_ROOT, "AROI/raw/selections/color")
 def sobel(path):
-    new_path  = os.path.join(constants.HDD_DATASET_ROOT, constants.DATASET, "raw/selections/depth", path)
+    new_path  = os.path.join(constants.HDD_DATASET_ROOT, constants.DATASET, "raw/selections/edge", path)
     path = os.path.join(color, path)
     # Load the image
     img = Image.open(path).convert("L")
@@ -27,7 +27,7 @@ def sobel(path):
     im.save(new_path)
 
 def dct(path):
-    new_path  = os.path.join(constants.HDD_DATASET_ROOT, constants.DATASET, "raw/selections/pose", path)
+    new_path  = os.path.join(constants.HDD_DATASET_ROOT, constants.DATASET, "raw/selections/dct", path)
     path = os.path.join(color, path)
     img = Image.open(path).convert("L")
     img = np.array(img)

@@ -57,7 +57,7 @@ class Trainer:
                 print('Using step lr scheduler')                
                 self.lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(self.optimizer, milestones=[int(x) for x in args.step_size.split(",")], gamma=0.1)
         # in duke ignore_index=255
-        self.criterion = SegmentationLosses(weight=weight, ignore_index=255, cuda=args.device).build_loss(mode=args.loss_type)
+        self.criterion = SegmentationLosses(weight=weight, ignore_index=0, cuda=args.device).build_loss(mode=args.loss_type)
         self.evaluator = Evaluator(train_set.num_classes)
         self.best_pred = 0.0
 
@@ -76,6 +76,7 @@ class Trainer:
         for i, sample in enumerate(tbar):
             image, target = sample['image'], sample['label']
             image, target = image.cuda(self.args.device), target.cuda(self.args.device)
+            #output,_ = self.model(image)
             output = self.model(image)
             loss = self.criterion(output, target)
             self.optimizer.zero_grad()
@@ -115,6 +116,7 @@ class Trainer:
             image, target = image.cuda(self.args.device), target.cuda(self.args.device)
 
             with torch.no_grad():
+                #output,_ = self.model(image)
                 output = self.model(image)
 
             if i == visualization_index:

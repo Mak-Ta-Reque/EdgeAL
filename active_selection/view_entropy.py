@@ -46,7 +46,7 @@ class ViewEntropySelector:
             model.eval()
             model.apply(turn_on_dropout)
 
-        for scene_ctr, scene_id in enumerate(tqdm(scene_id_to_index, desc='ViewEntropy[Scene]')):
+        for scene_ctr, scene_id in enumerate(tqdm(scene_id_to_index, desc='EdgeEntropy[Edge]')):
             depths = []
             poses = []
             num_frames_scenes = len(scene_id_to_index[scene_id])
@@ -59,10 +59,10 @@ class ViewEntropySelector:
             intrinsic = None
 
             # get predictions for all candidates
-            for im_idx, frame_id in enumerate(tqdm(scene_id_to_index[scene_id], desc='ViewEntropy[Pred]')):
+            for im_idx, frame_id in enumerate(tqdm(scene_id_to_index[scene_id], desc='EdgeEntropy[Pred]')):
                 sample = dataset[frame_id]
 
-                depths.append(sample['depth'])
+                depths.append(sample['edge'])
                 poses.append(sample['pose'])
                 intrinsic = sample['intrinsic']
 
@@ -86,9 +86,9 @@ class ViewEntropySelector:
             world_coordinates, frame_origins = self.project_images_to_world(depths, poses, intrinsic, scene_id_to_index[scene_id])
 
             # project prediction probabilities to each frame
-            for ctr, frame_id in enumerate(tqdm(scene_id_to_index[scene_id], desc='ViewEntropy[Entropy]')):
+            for ctr, frame_id in enumerate(tqdm(scene_id_to_index[scene_id], desc='EdgeEntropy[Entropy]')):
                 sample = dataset[frame_id]
-                score, frame_coverages, _ = self.get_projected_prediction_entropy(frame_id, sample['depth'], sample['pose'], sample['intrinsic'], world_coordinates, probabilities, frame_origins, dataset.num_classes, probabilities_type)
+                score, frame_coverages, _ = self.get_projected_prediction_entropy(frame_id, sample['edge'], sample['pose'], sample['intrinsic'], world_coordinates, probabilities, frame_origins, dataset.num_classes, probabilities_type)
                 if not score is None:
                     score[sample['label'].numpy() == 255] = 0
                     all_frame_coverages[frame_id] = frame_coverages
@@ -124,22 +124,22 @@ class ViewEntropySelector:
 
         return scores, image_paths, all_frame_coverages, superpixel_masks, saved_probabilities
 
-    def project_image_to_world(self, x, y, depth, cam2world, depth_intrinsic):
-        #print("Depth: ",depth.shape)
-        I = torch.zeros(4, depth.shape[0]).type(torch.cuda.FloatTensor)
+    def project_image_to_world(self, x, y, edge, cam2world, depth_intrinsic):
+        #print("edge: ",edge.shape)
+        I = torch.zeros(4, edge.shape[0]).type(torch.cuda.FloatTensor)
         #print(x.shape)
         #print("I: ", I.shape)
         #print(y.shape)
-        I[0, :] = x * depth
-        I[1, :] = y * depth
-        I[2, :] = depth
+        I[0, :] = x * edge
+        I[1, :] = y * edge
+        I[2, :] = edge
         I[3, :] = 1.0
-        #print("Depth int: ", depth_intrinsic.shape)
+        #print("edge int: ", depth_intrinsic.shape)
         #world_coordinates = torch.mm(torch.from_numpy(cam2world).type(torch.cuda.FloatTensor), torch.mm(
         #    torch.from_numpy(inv(depth_intrinsic)).type(torch.cuda.FloatTensor), I))
         world_coordinates = torch.mm(torch.from_numpy(cam2world).type(torch.cuda.FloatTensor), torch.mm(
             torch.from_numpy(inv(depth_intrinsic)).type(torch.cuda.FloatTensor), I))
-        del I, x, y, depth
+        del I, x, y, edge
         torch.cuda.empty_cache()
         return world_coordinates
 
@@ -151,7 +151,7 @@ class ViewEntropySelector:
         
         frame_origins = torch.zeros(len(depths) * constants.DEPTH_WIDTH * constants.DEPTH_HEIGHT).type(torch.cuda.IntTensor)
 
-        for im_idx in tqdm(range(len(depths)), desc='ViewEntropy[World]'):
+        for im_idx in tqdm(range(len(depths)), desc='EdgeEntropy[Edge]'):
 
             world_coordinates[:, im_idx * constants.DEPTH_WIDTH * constants.DEPTH_HEIGHT: (im_idx + 1) * constants.DEPTH_WIDTH * constants.DEPTH_HEIGHT] = self.project_image_to_world(torch.from_numpy(x_mesh).type(torch.cuda.FloatTensor).flatten(), torch.from_numpy(y_mesh).type(
                 torch.cuda.FloatTensor).flatten(), torch.from_numpy(depths[im_idx][:]).type(torch.cuda.FloatTensor).flatten(), cam2worlds[im_idx], depth_intrinsic)
@@ -159,7 +159,7 @@ class ViewEntropySelector:
 
         return world_coordinates, frame_origins
 
-    def get_projected_prediction_entropy(self, destination_frame_index, depth, cam2world, depth_intrinsic, world_coordinates, probabilities, frame_origins, num_classes, probabilities_type):
+    def get_projected_prediction_entropy(self, destination_frame_index, edge, cam2world, depth_intrinsic, world_coordinates, probabilities, frame_origins, num_classes, probabilities_type):
         world_coordinates_copy = world_coordinates.transpose(0, 1)[:, :3]
         frame_origins_copy = frame_origins.clone()
         #projected_points = torch.mm(torch.mm(torch.from_numpy(depth_intrinsic).type(torch.cuda.FloatTensor),
@@ -180,13 +180,13 @@ class ViewEntropySelector:
         world_coordinates_copy = world_coordinates_copy[selection_mask_0]
         frame_origins_selected = frame_origins_copy[selection_mask_0]
 
-        depth = torch.from_numpy(depth).type(torch.cuda.FloatTensor)
-        depth = depth[projected_points[:, 1].type(torch.cuda.LongTensor), projected_points[:, 0].type(torch.cuda.LongTensor)].flatten()
+        edge = torch.from_numpy(edge).type(torch.cuda.FloatTensor)
+        edge = edge[projected_points[:, 1].type(torch.cuda.LongTensor), projected_points[:, 0].type(torch.cuda.LongTensor)].flatten()
         
         backprojected_points = self.project_image_to_world(projected_points[:, 0], projected_points[
-            :, 1], depth, cam2world, depth_intrinsic).transpose(0, 1)[:, :3]
+            :, 1], edge, cam2world, depth_intrinsic).transpose(0, 1)[:, :3]
 
-        selection_mask_1 = (torch.norm(world_coordinates_copy - backprojected_points, dim=1) < constants.WORLD_DISTANCE_THRESHOLD)
+        selection_mask_1 = (torch.norm(world_coordinates_copy - backprojected_points, dim=1) < constants.EDGE_THRESHOLD)
         temp = selection_mask_0.clone()[selection_mask_0]
         selection_mask_0[selection_mask_0.clone()] = temp & selection_mask_1.clone() 
 

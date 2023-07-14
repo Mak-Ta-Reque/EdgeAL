@@ -11,16 +11,16 @@ from collections import OrderedDict, Counter
 from tqdm import tqdm
 
 
-def project_image_to_world(x, y, depth, cam2world, depth_intrinsic):
-    I = torch.zeros(4, depth.shape[0]).type(torch.cuda.FloatTensor)
-    I[0, :] = x * depth
-    I[1, :] = y * depth
-    I[2, :] = depth
+def project_image_to_world(x, y, edge, cam2world, depth_intrinsic):
+    I = torch.zeros(4, edge.shape[0]).type(torch.cuda.FloatTensor)
+    I[0, :] = x * edge
+    I[1, :] = y * edge
+    I[2, :] = edge
     I[3, :] = 1.0
     world_coordinates = torch.mm(torch.from_numpy(cam2world).type(torch.cuda.FloatTensor), torch.mm(
         torch.from_numpy(inv(depth_intrinsic)).type(torch.cuda.FloatTensor), I))
 
-    del I, x, y, depth
+    del I, x, y, edge
     torch.cuda.empty_cache()
 
     return world_coordinates
@@ -46,7 +46,7 @@ def project_images_to_world(depths, cam2worlds, depth_intrinsic, superpixels, fr
 
     return world_coordinates, frame_origins, superpixel_origins
 
-def project_world_to_image(depth, superpixel_map, cam2world, depth_intrinsic, world_coordinates, frame_origins, superpixel_origins):
+def project_world_to_image(edge, superpixel_map, cam2world, depth_intrinsic, world_coordinates, frame_origins, superpixel_origins):
     world_coordinates_copy = world_coordinates.transpose(0, 1)[:, :3]
     projected_points = torch.mm(torch.mm(torch.from_numpy(depth_intrinsic).type(torch.cuda.FloatTensor),
                                          torch.from_numpy(inv(cam2world)).type(torch.cuda.FloatTensor)), world_coordinates)
@@ -70,12 +70,12 @@ def project_world_to_image(depth, superpixel_map, cam2world, depth_intrinsic, wo
     superpixel_origins = superpixel_origins[selection_mask]
     world_coordinates_copy = world_coordinates_copy[selection_mask]
 
-    depth = torch.from_numpy(depth).type(torch.cuda.FloatTensor)
-    depth = depth[projected_points[:, 1].type(torch.cuda.LongTensor), projected_points[:, 0].type(torch.cuda.LongTensor)].flatten()
+    edge = torch.from_numpy(edge).type(torch.cuda.FloatTensor)
+    edge = edge[projected_points[:, 1].type(torch.cuda.LongTensor), projected_points[:, 0].type(torch.cuda.LongTensor)].flatten()
     backprojected_points = project_image_to_world(projected_points[:, 0], projected_points[
-        :, 1], depth, cam2world, depth_intrinsic).transpose(0, 1)[:, :3]
+        :, 1], edge, cam2world, depth_intrinsic).transpose(0, 1)[:, :3]
 
-    selection_mask = (torch.norm(world_coordinates_copy - backprojected_points, dim=1) < constants.WORLD_DISTANCE_THRESHOLD)
+    selection_mask = (torch.norm(world_coordinates_copy - backprojected_points, dim=1) < constants.EDGE_THRESHOLD)
 
     projected_points = projected_points[selection_mask]
 
@@ -121,7 +121,7 @@ def find_superpixel_coverage(dataset_name, lmdb_handle, superpixel_dir, base_siz
 
         for frame_id in scene_id_to_index[scene_id]:
             sample = dataset[frame_id]
-            depths.append(sample['depth'])
+            depths.append(sample['edge'])
             poses.append(sample['pose'])
             superpixels.append(sample['superpixel'])
             intrinsic = sample['intrinsic']
@@ -130,7 +130,7 @@ def find_superpixel_coverage(dataset_name, lmdb_handle, superpixel_dir, base_siz
 
         for frame_id in tqdm(scene_id_to_index[scene_id], desc='Scene[Project]'):
             sample = dataset[frame_id]
-            frame_coverages = project_world_to_image(sample['depth'], sample['superpixel'], sample['pose'], sample['intrinsic'], world_coordinates, frame_origins, superpixel_origins)
+            frame_coverages = project_world_to_image(sample['edge'], sample['superpixel'], sample['pose'], sample['intrinsic'], world_coordinates, frame_origins, superpixel_origins)
             if not frame_coverages is None:
                 all_frame_coverages[frame_id] = frame_coverages
                 image_paths.append(images[frame_id])

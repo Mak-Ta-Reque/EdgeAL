@@ -428,7 +428,7 @@ class IndoorScenesWithAllInfo(dataset_base.DatasetBase):
         image_path = image_path.decode()
         scene_id = "_".join(image_path.split("_")[:self.scene_id_split_idx])
         info_id = "_".join(image_path.split("_")[:self.info_id_split_idx])
-        depth_image_path = os.path.join(constants.SSD_DATASET_ROOT, self.dataset, "raw", "selections", "depth", f"{image_path}{self.depth_ext}")
+        depth_image_path = os.path.join(constants.SSD_DATASET_ROOT, self.dataset, "raw", "selections", "edge", f"{image_path}{self.depth_ext}")
         info_path = os.path.join(constants.SSD_DATASET_ROOT, self.dataset, "raw", "selections", "pose", f"{info_id}.png")
         pose_path = os.path.join(constants.SSD_DATASET_ROOT, self.dataset, "raw", "selections", "pose", f"{image_path}.png")
         spx_path = os.path.join(constants.SSD_DATASET_ROOT, self.dataset, "raw", "selections", self.superpixel_dir, f"{image_path}.png")
@@ -441,7 +441,7 @@ class IndoorScenesWithAllInfo(dataset_base.DatasetBase):
         spx = self.process_superpixels(spx_path)
 
         ret_dict = custom_transforms.transform_validation_sample(image, target, base_size=(constants.DEPTH_HEIGHT, constants.DEPTH_WIDTH))
-        ret_dict['depth'] = depth_image
+        ret_dict['edge'] = depth_image
         ret_dict['intrinsic'] = depth_intrinsic
         ret_dict['pose'] = pose
         ret_dict['scene_id'] = scene_id

@@ -19,14 +19,18 @@ class TransformOCTMaskAdjustment(object):
     def __call__(self, sample):
         img = sample['image']
         mask = sample['label']
-        #mask[mask == 8] = 0 #For duke
-        #mask[mask == 9] = 8 # For duke
-        
-        #mask[mask == 4] = 0 #For AROI
-        #mask[mask == 7] = 4 # For AROI
+        if constants.DATASET == "duke":
+            mask[mask == 8] = 0 #For duke
+            mask[mask == 9] = 8 # For duke
+            if torch.max(mask) > 8: raise ValueError("Classes in duke is higher than 7")
+            if torch.min(mask) < 0 : raise ValueError("Classes in duke is lower than 7")
+        elif constants.DATASET == "AROI":
+            mask[mask == 4] = 0 #For AROI
+            mask[mask == 7] = 4 # For AROI
 
-        #if torch.max(mask) > 7: raise ValueError("Classes in AROI is higher than 7")
-        #if torch.min(mask) < 0 : raise ValueError("Classes in AROI is lower than 7")
+            if torch.max(mask) > 7: raise ValueError("Classes in AROI is higher than 7")
+            if torch.min(mask) < 0 : raise ValueError("Classes in AROI is lower than 7")
+        
         return {'image': img,
                 'label': mask}
 

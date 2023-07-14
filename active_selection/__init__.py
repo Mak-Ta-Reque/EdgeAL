@@ -1,4 +1,4 @@
-from active_selection import random_selection, view_entropy, vote_entropy,  softmax_entropy, regional_vote_entropy, softmax_confidence, softmax_margin, core_set, max_repr, regional_view_entropy_kl, ceal, ensemble
+from active_selection import random_selection, view_entropy, vote_entropy,  softmax_entropy, regional_vote_entropy, softmax_confidence, softmax_margin, core_set, max_repr, regional_view_entropy_kl, ceal, ensemble, badge_sampling, edge_entropy_kl
 from dataloader.dataset_base import OverlapHandler
 import constants
 import os
@@ -10,6 +10,8 @@ def get_active_selector(args, lmdb_handle, train_set):
         return ceal.CEALSelector(args.dataset, lmdb_handle, args.base_size, args.batch_size, train_set.num_classes, args.start_entropy_threshold, args.entropy_change_per_selection, args.device)
     elif args.active_selection_mode == 'voteentropy_soft':
         return vote_entropy.VoteEntropySelector(args.dataset, lmdb_handle, args.base_size, args.batch_size, train_set.num_classes, True, args.device)
+    elif args.active_selection_mode == 'badge_selection':
+        return badge_sampling.BadgeSampling(args.dataset, lmdb_handle, args.base_size, args.batch_size, train_set.num_classes, args.device)
     elif args.active_selection_mode == 'softmax_entropy':
         return softmax_entropy.SoftmaxEntropySelector(args.dataset, lmdb_handle, args.base_size, args.batch_size, train_set.num_classes, args.device)
     elif args.active_selection_mode == 'softmax_margin':
@@ -30,6 +32,12 @@ def get_active_selector(args, lmdb_handle, train_set):
         if not args.no_overlap:
             overlap_handler = OverlapHandler(os.path.join(constants.SSD_DATASET_ROOT, args.dataset, "raw", "selections", args.superpixel_coverage_dir), args.superpixel_overlap, memory_hog_mode=True)
         return regional_view_entropy_kl.RegionalViewEntropyWithKldivSelector(args.dataset, lmdb_handle, args.superpixel_dir, args.base_size, train_set.num_classes, args.region_size, overlap_handler, mode=args.region_selection_mode, device=args.device)
+    elif args.active_selection_mode == 'edgeal_region':
+        overlap_handler = None
+        if not args.no_overlap:
+            overlap_handler = OverlapHandler(os.path.join(constants.SSD_DATASET_ROOT, args.dataset, "raw", "selections", args.superpixel_coverage_dir), args.superpixel_overlap, memory_hog_mode=True)
+        return edge_entropy_kl.EdgeEntropyWithKldivSelector(args.dataset, lmdb_handle, args.superpixel_dir, args.base_size, train_set.num_classes, args.region_size, overlap_handler, mode=args.region_selection_mode, device=args.device)
+
     elif args.active_selection_mode == 'ensemble':
         return ensemble.EnsembleSelector(args.dataset, lmdb_handle, args.base_size, args.batch_size, train_set, args)
     raise NotImplementedError
