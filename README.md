@@ -48,7 +48,7 @@ Run `--help` for more details.
 python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 5 --eval-interval 2 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname view_entropy_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240ce+dice --base-size 224,224 --loss-type ce+dice --max-iterations 10 --active-selection-size 7 --active-selection-mode edgeal_region --region-selection-mode superpixel
 
 ##### Random
-```sh
+
 python train_active.py --model y_net_gen_ffc --g-ratio 0.5 --dataset duke --workers 2 --epochs 100 --eval-interval 1 --batch-size=10 --lr 5e-4 --weight-decay 1e-4 --optimizer Adam --use-lr-scheduler --lr-scheduler step --step-size 100 --checkname random_ynet+fcc_0_lr-0.0004_bs-6_ep-60_wb-0_lrs-0_240x240focalsoft --base-size 224,224 --loss-type ce+dice --max-iterations 10 --active-selection-size 7 --active-selection-mode random
 
 ```
@@ -79,8 +79,8 @@ dataset # root dataset directory
         ├── selections
             ├── color # rgb frames
             ├── label # ground truth maps
-            ├── depth # depth maps
-            ├── pose # camera extrinsics for each frame
+            ├── edge # use any edge detection method / sovel operator
+            ├── dct # cosign transform of image
             ├── info # camera intrinsics
             ├── superpixel # superpixel maps
             ├── coverage_superpixel # coverage maps
@@ -92,7 +92,7 @@ dataset # root dataset directory
     ├── dataset.lmdb # rgb frames + labels in lmdb format
 ```
 
-A small example dataset is provided with this repository in [`dataset/duke-sample`](https://github.com/nihalsid/ViewAL/tree/master/dataset/duke-sample).
+
 
 ## Data Generation
 
@@ -106,5 +106,3 @@ Cost-Effective Active Learning for Melanoma Segmentation
 ```https://github.com/imatge-upc/medical-2017-nipsw```
 ```https://github.com/marc-gorriz/CEAL-Medical-Image-Segmentation```
 
-## Dataset sources
-``` https://grand-challenge.org```
